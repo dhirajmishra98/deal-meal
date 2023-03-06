@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meal_tracker/models/meal.dart';
+import 'package:meal_tracker/screens/meal_detail_screen.dart';
 
 class MealItem extends StatelessWidget {
   static const routeName = '/meal-item';
+  final String id;
   final String title;
   final String imageUrl;
   final int duration;
@@ -10,7 +12,8 @@ class MealItem extends StatelessWidget {
   final Affordability affordability;
 
   const MealItem(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.imageUrl,
       required this.duration,
       required this.complexity,
@@ -46,13 +49,16 @@ class MealItem extends StatelessWidget {
     }
   }
 
-  void selectedMeal() {}
+  void selectedMeal(BuildContext ctx) {
+    Navigator.pushNamed(ctx, MealDetailScreen.routeName, arguments: id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
     return InkWell(
-      onTap: selectedMeal,
+      onTap: () => selectedMeal(context),
       child: Card(
         margin: const EdgeInsets.all(10),
         elevation: 4,
