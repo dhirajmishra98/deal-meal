@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meal_tracker/screens/favorite_screen.dart';
-import 'package:meal_tracker/screens/filter_screen.dart';
-import 'package:meal_tracker/screens/meal_detail_screen.dart';
-import 'package:meal_tracker/screens/tabs_screen.dart';
 
+import '../screens/favorite_screen.dart';
+import '../screens/filter_screen.dart';
+import '../screens/meal_detail_screen.dart';
+import '../screens/tabs_screen.dart';
 import './screens/categories_screen.dart';
 import './screens/category_meals_screen.dart';
 
@@ -47,10 +47,10 @@ class MyApp extends StatelessWidget {
       home:
           const TabsScreen(), //if tabs are used we have to return that screen as main screen
       // initialRoute:
-          // '/', //we can define initial route key here and use int routes map as key
+      // '/', //we can define initial route key here and use int routes map as key
       routes: {
         // '/': (ctx) =>
-            // const TabsScreen(), //this is by default the initial screen loading (default screen initially)
+        // const TabsScreen(), //this is by default the initial screen loading (default screen initially)
         // '/category-meals' : (ctx) => CategoryMealsScreen(), //we can have typo here in key string so we create static string name in each screen class and use that here
         CategoryMealsScreen.routeName: (ctx) =>
             const CategoryMealsScreen(), //above method can be used like this to avoid typo
