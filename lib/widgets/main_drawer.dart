@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:meal_tracker/screens/filter_screen.dart';
+import 'package:meal_tracker/screens/tabs_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
 
- Widget BuildListTile(BuildContext context,String title, IconData icon) {
+  Widget buildListTile(BuildContext context, String title, IconData icon,
+      VoidCallback tapHandler) {
     return ListTile(
-      leading:  Icon(
+      leading: Icon(
         icon,
         size: 26,
       ),
@@ -13,7 +16,7 @@ class MainDrawer extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleSmall,
       ),
-      onTap: () {},
+      onTap: tapHandler,
     );
   }
 
@@ -41,8 +44,14 @@ class MainDrawer extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          BuildListTile(context, 'Meals', Icons.restaurant),
-          BuildListTile(context, 'Settings', Icons.settings),
+          buildListTile(context, 'Meals', Icons.restaurant, () {
+            Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+          }),
+          buildListTile(context, 'Filter', Icons.settings, () {
+            // Navigator.of(context).pushNamed(FilterScreen.routeName); //pushname just add pages to pages on stack on top that makes it more heavy
+            Navigator.of(context).pushReplacementNamed(FilterScreen.routeName); //this just replace the page instead push to stack of pages
+            //login page is use case of it where after login we dont want option to go back. so replace page
+          }),
         ],
       ),
     );

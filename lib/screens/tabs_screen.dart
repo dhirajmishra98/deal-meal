@@ -4,6 +4,7 @@ import 'package:meal_tracker/screens/favorite_screen.dart';
 import 'package:meal_tracker/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
+  static const routeName = '/';
   const TabsScreen({super.key});
 
   @override
@@ -39,9 +40,11 @@ class _TabsScreenState extends State<TabsScreen> {
         centerTitle: true,
       ),
       drawer: const MainDrawer(),
-      body: _pages[_selectedPageIndex]['page'] as Widget, //object is typecast to widget
+      body: _pages[_selectedPageIndex]['page']
+          as Widget, //object is typecast to widget
       // backgroundColor: Theme.of(context).colorScheme.primary,
-      bottomNavigationBar: BottomNavigationBar( //now customized bar as need , I will be using package here
+      bottomNavigationBar: BottomNavigationBar(
+          //now customized bar as need , I will be using package here
           type: BottomNavigationBarType.shifting,
           unselectedItemColor: Colors.white,
           selectedItemColor: Theme.of(context).colorScheme.secondary,
