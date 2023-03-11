@@ -37,7 +37,7 @@ class _UpperTabsScreenState extends State<UpperTabsScreen> {
         body: TabBarView(
           children: <Widget>[
             CategoriesScreen(),
-            FavouriteScreen(),
+            // FavouriteScreen(),
           ],
         ),
       ),

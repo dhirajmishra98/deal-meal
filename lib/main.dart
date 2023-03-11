@@ -1,20 +1,85 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-import '../screens/favorite_screen.dart';
-import '../screens/filter_screen.dart';
-import '../screens/meal_detail_screen.dart';
-import '../screens/tabs_screen.dart';
+import '/dummy_data.dart';
+import './models/meal.dart';
+import './screens/favorite_screen.dart';
+import './screens/filter_screen.dart';
+import './screens/meal_detail_screen.dart';
+import './screens/tabs_screen.dart';
 import './screens/categories_screen.dart';
 import './screens/category_meals_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+  Map<String, bool> _filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegeterian': false,
+    'vegan': false,
+  };
+
+  List<Meal> _availableMeals = dummyMeals;
+  List<Meal> _favouriteMeals = [];
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+
+      _availableMeals = dummyMeals.where((meal) {
+        if (_filters['gluten']! && !meal.isGlutenFree) {
+          return false;
+        }
+        if (_filters['lactose']! && !meal.isLactoseFree) {
+          return false;
+        }
+        if (_filters['vegeterian']! && !meal.isVegetarian) {
+          return false;
+        }
+        if (_filters['vegan']! && !meal.isVegan) {
+          return false;
+        }
+        if (_filters['gluten']! && !meal.isGlutenFree) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
+  void _toggleFilter(String mealId) {
+    int existingIndex = _favouriteMeals.indexWhere((meal) => meal.id == mealId);
+
+    if (existingIndex >= 0) {
+      setState(() {
+        _favouriteMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        _favouriteMeals.add(
+          dummyMeals.firstWhere((meal) => meal.id == mealId),
+        );
+      });
+    }
+  }
+
+  bool isFavourite(String mealId) {
+    return _favouriteMeals.any((meal) => meal.id == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,19 +109,19 @@ class MyApp extends StatelessWidget {
             ),
       ),
       // home: const CategoriesScreen(),
-      home:
-          const TabsScreen(), //if tabs are used we have to return that screen as main screen
+      home: TabsScreen(
+          _favouriteMeals), //if tabs are used we have to return that screen as main screen
       // initialRoute:
       // '/', //we can define initial route key here and use int routes map as key
       routes: {
         // '/': (ctx) =>
         // const TabsScreen(), //this is by default the initial screen loading (default screen initially)
         // '/category-meals' : (ctx) => CategoryMealsScreen(), //we can have typo here in key string so we create static string name in each screen class and use that here
-        CategoryMealsScreen.routeName: (ctx) =>
-            const CategoryMealsScreen(), //above method can be used like this to avoid typo
-        MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
-        FavouriteScreen.routeName: (ctx) => const FavouriteScreen(),
-        FilterScreen.routeName: (ctx) => const FilterScreen(),
+        CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(
+            _availableMeals), //above method can be used like this to avoid typo
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(_toggleFilter,isFavourite),
+        // FavouriteScreen.routeName: (ctx) => FavouriteScreen(),
+        FilterScreen.routeName: (ctx) => FilterScreen(_filters, _setFilters),
       },
       //onGenerateRoute is used when screen/pages are created dynamically we dont now in advance and that's is not registered in routes then it will preoceed here according to condition meets
       // onGenerateRoute: (settings) {
